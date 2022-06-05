@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
 from typing import List
-from sys import argv
-from time import time
-from subprocess import PIPE, DEVNULL, run
 
 def main(args: List) -> None:
+    from time import time
+    from subprocess import PIPE, DEVNULL, run
+
     timer = time()
 
     run(
@@ -16,7 +16,9 @@ def main(args: List) -> None:
     )
 
     print("[BUILDER] Built in {}s".format(round(time() - timer, 3)))
+    exit(1)
 
 
 if __name__ == "__main__":
+    from sys import argv, exit
     main(argv)

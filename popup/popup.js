@@ -23,14 +23,14 @@ async function queryStorage() {
             <th>${cat}</th>
             <th>[hh:mm:ss]</span></th>
         </tr>
-     `;
+    `;
 
     let storage = await (browser.storage.local.get());
 
     let storageArr = [];
     for (let entry in storage)
         if (entry.startsWith(cat))
-            storageArr.push([entry.split("-")[1], storage[entry]]);
+            storageArr.push([entry.split(cat.slice(2) + "-")[1], storage[entry]]);
 
     storageArr.sort((a, b) => b[1] - a[1]);
 

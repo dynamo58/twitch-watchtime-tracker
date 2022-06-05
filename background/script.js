@@ -1,24 +1,25 @@
-const DEBUGGING = false;
-
-async function check() {
-    function scrapeStatus() {
+// find out if there is a streamer being watched
+function scrapeStatus() {
+    return (
         // check if stream is live
+        (document.querySelectorAll('svg[type="color-text-accessible-red"]').length === 1) &&
         // check if the audio is not disabled
+        (document.querySelectorAll('[id^="player-volume-slider"]')[0].value > 0) &&
         // check if the stream is playing
-        return (
-            (document.querySelectorAll('svg[type="color-text-accessible-red"]').length === 1) &&
-            (document.querySelectorAll('[id^="player-volume-slider"]')[0].value > 0) &&
-            (document.getElementsByClassName("player-overlay-background--darkness-5").length == 0)
-        )
-    }
+        (document.getElementsByClassName("player-overlay-background--darkness-5").length == 0)
+    )
+}
 
-    function scrapeInfo() {
-        const streamer = "streamer-" + document.title.split(") ")[document.title.split(") ").length - 1].split(" -")[0];
-        const category = "category-" + document.body.querySelector('[data-a-target="stream-game-link"]').href.split("/")[5].replaceAll("%20", " ").replaceAll("%26", "&").replaceAll("%3A", ":");
+// get streamer name and category name
+function scrapeInfo() {
+    const streamer = "streamer-" + document.title.split(") ")[document.title.split(") ").length - 1].split(" -")[0];
+    const category = "category-" + document.getElementsByClassName("CoreText-sc-cpl358-0 deWlGg")[0].textContent;
 
-        return [streamer, category]
-    }
+    return [streamer, category]
+}
 
+// check if watching and act accordingly
+async function check() {
     try {
         // if the requirements are met, update local storage
         if (scrapeStatus()) {
@@ -27,10 +28,7 @@ async function check() {
             const secs = await browser.storage.local.get({ [streamer]: 0, [category]: 0 });
             browser.storage.local.set({ [streamer]: secs[streamer] + 5, [category]: secs[category] + 5 });
         }
-    }
-    catch (err) {
-        console.log("[w-t] | error:\n", err);
-    }
+    } catch {  }
 }
 
 (async function main() {
