@@ -37,11 +37,5 @@
             "matches": ["*://*.twitch.tv/*"],
             "js": ["background/script.js"]
         }
-    ],
-
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "{b5439511-6962-4059-bae9-12a446cae4bc}"
-        }
-    }
+    ]
 }
